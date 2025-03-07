@@ -51,7 +51,7 @@ The application follows a microservices architecture with the following key serv
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/eatr.git
+git clone https://github.com/sarihammad/eatr.git
 cd eatr
 ```
 
