@@ -1,4 +1,4 @@
-# Uber Eats Clone
+# Eatr
 
 A scalable, fault-tolerant food delivery platform built with modern technologies.
 
@@ -51,8 +51,8 @@ The application follows a microservices architecture with the following key serv
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/uber-eats-clone.git
-cd uber-eats-clone
+git clone https://github.com/yourusername/eatr.git
+cd eatr
 ```
 
 2. Install dependencies:
