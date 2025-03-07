@@ -1,7 +1,7 @@
 {
-  "name": "delivery-service",
+  "name": "@eatr/delivery-service",
   "version": "1.0.0",
-  "description": "Delivery management service for Uber Eats clone",
+  "description": "Delivery management service for Eatr",
   "main": "dist/index.js",
   "scripts": {
     "start": "node dist/index.js",
