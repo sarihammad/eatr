@@ -1,0 +1,138 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:14-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_MULTIPLE_DATABASES: eatr,eatr_restaurants,eatr_orders,eatr_payments,eatr_delivery,eatr_notifications
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+  user-service:
+    build:
+      context: ../backend/services/user-service
+      dockerfile: Dockerfile
+    environment:
+      - NODE_ENV=development
+      - DB_HOST=postgres
+      - REDIS_HOST=redis
+      - KAFKA_BROKERS=kafka:9092
+    depends_on:
+      - postgres
+      - redis
+      - kafka
+    ports:
+      - "3001:3001"
+
+  restaurant-service:
+    build:
+      context: ../backend/services/restaurant-service
+      dockerfile: Dockerfile
+    environment:
+      - NODE_ENV=development
+      - DB_HOST=postgres
+      - REDIS_HOST=redis
+      - KAFKA_BROKERS=kafka:9092
+    depends_on:
+      - postgres
+      - redis
+      - kafka
+    ports:
+      - "3002:3002"
+
+  order-service:
+    build:
+      context: ../backend/services/order-service
+      dockerfile: Dockerfile
+    environment:
+      - NODE_ENV=development
+      - DB_HOST=postgres
+      - REDIS_HOST=redis
+      - KAFKA_BROKERS=kafka:9092
+    depends_on:
+      - postgres
+      - redis
+      - kafka
+    ports:
+      - "3003:3003"
+
+  payment-service:
+    build:
+      context: ../backend/services/payment-service
+      dockerfile: Dockerfile
+    environment:
+      - NODE_ENV=development
+      - DB_HOST=postgres
+      - KAFKA_BROKERS=kafka:9092
+    depends_on:
+      - postgres
+      - kafka
+    ports:
+      - "3004:3004"
+
+  delivery-service:
+    build:
+      context: ../backend/services/delivery-service
+      dockerfile: Dockerfile
+    environment:
+      - NODE_ENV=development
+      - DB_HOST=postgres
+      - REDIS_HOST=redis
+      - KAFKA_BROKERS=kafka:9092
+    depends_on:
+      - postgres
+      - redis
+      - kafka
+    ports:
+      - "3005:3005"
+
+  notification-service:
+    build:
+      context: ../backend/services/notification-service
+      dockerfile: Dockerfile
+    environment:
+      - NODE_ENV=development
+      - DB_HOST=postgres
+      - REDIS_HOST=redis
+      - KAFKA_BROKERS=kafka:9092
+    depends_on:
+      - postgres
+      - redis
+      - kafka
+    ports:
+      - "3006:3006"
+
+volumes:
+  postgres_data:
+  redis_data:
