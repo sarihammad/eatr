@@ -1,5 +1,5 @@
 {
-  "name": "uber-eats-clone",
+  "name": "eatr",
   "version": "1.0.0",
   "main": "index.js",
   "directories": {
@@ -11,5 +11,5 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "Eatr - A food delivery platform"
 }
