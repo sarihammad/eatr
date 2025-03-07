@@ -63,8 +63,8 @@ jobs:
           context: backend/services/${{ matrix.service }}
           push: true
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/uber-eats-${{ matrix.service }}:latest
-            ${{ secrets.DOCKERHUB_USERNAME }}/uber-eats-${{ matrix.service }}:${{ github.sha }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/eatr-${{ matrix.service }}:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/eatr-${{ matrix.service }}:${{ github.sha }}
 
   deploy:
     needs: build-and-push
@@ -82,12 +82,12 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Update kube config
-        run: aws eks update-kubeconfig --name uber-eats-cluster --region ${{ secrets.AWS_REGION }}
+        run: aws eks update-kubeconfig --name eatr-cluster --region ${{ secrets.AWS_REGION }}
 
       - name: Deploy to EKS
         run: |
           # Update image tags in deployment files
           for service in user-service notification-service; do
-            sed -i "s|uber-eats-clone/${service}:latest|${{ secrets.DOCKERHUB_USERNAME }}/uber-eats-${service}:${github.sha}|g" infra/kubernetes/deployments/${service}-deployment.yaml
+            sed -i "s|eatr/${service}:latest|${{ secrets.DOCKERHUB_USERNAME }}/eatr-${service}:${github.sha}|g" infra/kubernetes/deployments/${service}-deployment.yaml
             kubectl apply -f infra/kubernetes/deployments/${service}-deployment.yaml
           done
