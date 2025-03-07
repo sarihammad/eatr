@@ -114,7 +114,3 @@ The application can be deployed using:
 - Prometheus + Grafana for metrics
 - ELK Stack for logging
 - AWS CloudWatch for cloud resource monitoring
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
